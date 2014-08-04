@@ -11,13 +11,18 @@ web application for managing assassins
 * player is a python dictionary
   * name
   * committee
+
 example: curl asdfasdfasdf
 
 __what will happen in the background?__
-a new game is created
-* game has players
-* players have name, commmittee, id (from portal)
-* game has targets (assassin: player, target: player)
+a new __game__ is created
+* game has __players__
+ * players have name, commmittee, id (from portal)
+* game has __assignments__ 
+ * (assassin: player, target: player)
+* game has list of complete assignments
+* list of players that are out
+* list of players that are in
 
 ## generating targets
 
