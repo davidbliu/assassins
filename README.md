@@ -30,9 +30,13 @@ kill
 ### Assignment Procedure
 __option one:__ have array of all committees, loop: sample from array without replacement and assign, problem: people at end of array might overlap committees
 
-__option two:__ pick one committee (HT) as separator. looks like this: HT, random, random, random, HT, random, random, random...
+__option two:__ pick one committee (HT) as separator. looks like this: HT, random, random, random, HT, random, random, random... _problem_ this spaces out HT equally but not necessarily other committees
 
 __idea:__ have a 'blacklist' of committees you cannot assign from of length like 4 or something. this is a queue. rest of committees are fair game and you sample them randomly. dequeue from blacklist and enqueue committee you just assigned from. worst case under this method is HT, length_of_blacklist, HT
+
+### Simulation
+
+see `/lib/tasks/fake_game.rake`
 
 ### Interface
 here are some methods you should be able to execute
