@@ -93,10 +93,20 @@ task :create_ring => :environment do
 	end
 end
 
-
+'''
+create assignments like this (1,2), (2,3), (3,4), (4,5)...
+'''
 def convert_ring_to_assignments(ring)
+	assignments = []
 	p 'converting ring...'
+	for player in ring
+		assignment = Assignment.new()
+		# p player
+		
+	end
 end
 task :create_assignments => :environment do
 	p 'creating assignments...'
+	ring = create_ring(Player.all)
+	convert_ring_to_assignments(ring)
 end
