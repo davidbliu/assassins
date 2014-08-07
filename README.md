@@ -23,8 +23,16 @@ kill
 	player_2_id (guy that got killed)
 	time
 ```
+
+
 # Application
 
+### Assignment Procedure
+__option one:__ have array of all committees, loop: sample from array without replacement and assign, problem: people at end of array might overlap committees
+
+__option two:__ pick one committee (HT) as separator. looks like this: HT, random, random, random, HT, random, random, random...
+
+### Interface
 here are some methods you should be able to execute
 
 `get_alive`, `get_assigned(player)`, `get_dead`
