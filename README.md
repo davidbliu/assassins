@@ -1,14 +1,34 @@
-# Docker Notes sample app
+=======
+assassins
+=========
 
-This is an example of a Rails app that runs in a 
-Docker container and is linked to a PostgreSQL 
-database running in another container.
+web application for managing assassins 
 
-## License
+# Models
 
-Apache 2.0
+```yaml
+player
+	name
+	id
+	status (alive or dead)
+	kill_code
+assignment
+	player_id (who this is assigned to)
+	player_2_id (who i was assigned to kill)
+	time_started
+	time_completed
+	status
+kill
+	player_id
+	player_2_id (guy that got killed)
+	time
+```
+# Application
 
-## Copyright
+here are some methods you should be able to execute
 
-Copyright Docker Inc Education Team 2014 <education@docker.com>
+`get_alive`, `get_assigned(player)`, `get_dead`
 
+# Stories
+
+what happens when you say you killed someone?
