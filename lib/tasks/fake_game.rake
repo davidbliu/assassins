@@ -4,10 +4,19 @@ creates a game
 simulates game-time stuff
 global view of game
 '''
+task :create_game => :environment do
+	Game.where(name: 'test_game').destroy_all
+	game = Game.new
+	game.name = 'test_game'
+	game.save()
+end
 task :create_players => :environment do
+	game = Game.where(name:'test_game').first
+	p game.name+' is the game i will create players for homie'
+	p 'here are the players in this game'
+	p game.players
 	p 'removing all old players'
 	Player.destroy_all
-	p Player.all.length
 	#
 	# test is 15 players across 5 committees
 	#
@@ -19,11 +28,11 @@ task :create_players => :environment do
 		name = player_name
 		status = 'alive'
 		kill_code = index.to_s
-
 		#
 		# save player in db
 		#
-		player = Player.new
+		# player = Player.new
+		player = game.players.new
 		player.member_id = old_member_index
 		player.name = name
 		player.status = status
@@ -36,77 +45,32 @@ task :create_players => :environment do
 end
 
 task :global_view => :environment do
-	Player.all.each do |player|
-		p player.name
-		p player.committee 
-		p player.status
-	end
+	game = Game.where(name:'test_game').first
+	# game.players.each do |player|
+	# 	p player.name
+	# 	p player.committee 
+	# 	p player.status
+	# end
+	p game.get_player_names
+	p game.assignments.pluck(:player_id)
 end
-
-'''
-algorithm described in readme
-'''
-def create_ring(players, blacklist_size = 3)
-	committees = players.uniq.pluck(:committee)
-	num_players = players.length
-	blacklist = Queue.new
-	assigned = Array.new
-	while assigned.length < num_players
-		assigned_ids = assigned.map{|x| x.id}
-		committee = committees.sample
-		committees.delete(committee)
-		if not committee
-			print 'no committee, recycling blacklist...'
-			while blacklist.length>0
-				committees<<blacklist.pop
-			end
-		else
-			player_query = players.where(committee: committee).where.not(id: assigned_ids)
-			if player_query.length > 0
-				player = player_query.sample
-				p '     '+'say hello to '+player.name+' '+player.committee.to_s
-				p '     '+committee.to_s
-				p '>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>'
-				assigned << player
-				# successfully assigned with this committee, place into blacklist
-				blacklist << committee
-				# if too full, recycle back a committee
-				if blacklist.length > blacklist_size
-					committees << blacklist.pop
-				end
-			else
-				p committee.to_s+' is empty!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
-			end
-		end
-	end
-	return assigned
-end
-
 
 
 task :create_ring => :environment do
+	game = Game.where(name:'test_game').first
 	p 'creating ring...'
-	assigned = create_ring(Player.all)
+	assigned = game.create_ring
 	p 'this is the full assignments'
 	assigned.each do |p|
 		p p.name+' '+p.committee.to_s
 	end
 end
 
-'''
-create assignments like this (1,2), (2,3), (3,4), (4,5)...
-'''
-def convert_ring_to_assignments(ring)
-	assignments = []
-	p 'converting ring...'
-	for player in ring
-		assignment = Assignment.new()
-		# p player
-		
-	end
-end
+
+
 task :create_assignments => :environment do
+	game = Game.where(name:'test_game').first
 	p 'creating assignments...'
-	ring = create_ring(Player.all)
-	convert_ring_to_assignments(ring)
+	ring = game.create_ring
+	game.create_assignments_from_ring(ring)
 end
