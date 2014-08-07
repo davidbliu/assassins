@@ -15,6 +15,16 @@ web application for managing assassins
                                              
 ```
 
+# Table of Contents
+
+- [PBL Assassins ](#user-content-pbl-assassins-)
+- [Models](#user-content-models)
+- [Application](#user-content-application)
+		- [Assignment Algorithm](#user-content-assignment-algorithm)
+		- [Simulation](#user-content-simulation)
+		- [Interface](#user-content-interface)
+- [Stories](#user-content-stories)
+
 # Models
 
 ```yaml
