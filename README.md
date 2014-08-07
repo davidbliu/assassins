@@ -78,6 +78,26 @@ def create_ring(players, blacklist_size = 3)
 	return assigned
 end
 ```
+__effectiveness?__
+
+here is a result generated with blacklist_size of 3 (each committee at least spaced 3 away). some __manual assignments__ will  probably be needed at the end. _this weird stuff happens when some committees are much larger than others_
+"jane 5"
+"marcus 3"
+"sylvestor 2"
+"tweety 1"
+"mervyn 4"
+"macy 5"
+"max 2"
+"target 3"
+"tyrone 4"
+"joanne 3"
+"penny 2"
+"lin 4"
+"santa 2"
+"tj 2"
+"john 2"
+"jc 2"
+
 
 ### Simulation
 
