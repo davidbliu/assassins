@@ -81,6 +81,8 @@ end
 __effectiveness?__
 
 here is a result generated with blacklist_size of 3 (each committee at least spaced 3 away). some __manual assignments__ will  probably be needed at the end. _this weird stuff happens when some committees are much larger than others_
+
+```
 "jane 5"
 "marcus 3"
 "sylvestor 2"
@@ -97,7 +99,7 @@ here is a result generated with blacklist_size of 3 (each committee at least spa
 "tj 2"
 "john 2"
 "jc 2"
-
+```
 
 ### Simulation
 
