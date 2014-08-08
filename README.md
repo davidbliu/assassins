@@ -93,7 +93,7 @@ def create_ring(players = self.players, blacklist_size = 3)
 ```
 __effectiveness?__
 
-here is a result generated with blacklist_size of 3 (each committee at least spaced 3 away). some __manual assignments__ will  probably be needed at the end. _this weird stuff happens when some committees are much larger than others_
+here is a result generated with blacklist_size of 3 (each committee at least spaced 3 away). some __manual assignments__ will  probably be needed at the end. _this weird stuff happens when some committees are much larger than others (in this example i put a ton of people into committee 2)_
 
 ```
 "jane 5"
