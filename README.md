@@ -125,4 +125,9 @@ here are some methods you should be able to execute
 
 # Stories
 
-what happens when you say you killed someone?
+* what do you see when you log in?
+* what happens when you say you killed someone?
+* how often does your target update?
+* what happens in the case of people saying they killed but they didn't (and somehow got kill code)?
+* rollbacks?
+* what interface should be exposed to admins?
