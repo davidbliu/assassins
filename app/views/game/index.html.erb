@@ -1,0 +1,33 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
+<h1>Global View</h1>
+
+<div><b>Name:</b> <%= @game.name %></div>
+
+<div>
+	<b>Players</b>
+	<br>
+	<% @game.players.each do |player| %>
+	<div><%= player.name %></div>
+	<% end %>
+</div>
+
+<div>
+	<b>Assignments</b>
+	<br>
+	<% @game.assignments.each do |assignment| %>
+	<div><%= assignment.get_player.name %> has to kill <%= assignment.get_player_2.name %></div>
+	<% end %>
+</div>
+
+<div>
+	<b>Top Players</b>
+	<br>
+</div>
+
+
+<div>
+	<b>Dead Players</b>
+	<br>
+</div>
