@@ -7,24 +7,24 @@
 
 <div><b>Name:</b> <%= @game.name %></div>
 
-<div>
-	<b>Players</b>
+<div class='col-md-2'>
+	<b>Players (<%= @game.players.length %>)</b>
 	<br>
 	<% @game.players.each do |player| %>
 	<div><%= player.name %></div>
 	<% end %>
 </div>
 
-<div>
-	<b>Ongoing Assignments</b>
+<div class='col-md-4'>
+	<b>Ongoing Assignments (<%= @ongoing.length %>)</b>
 	<br>
 	<% @ongoing.each do |assignment| %>
 	<div class='assignment' id='<%= assignment.id %>'><%= assignment.get_player.name %> has to kill <%= assignment.get_player_2.name %> (<%= assignment.status %>) (<a href = '/complete_assignment/<%= assignment.id %>'><%= assignment.id %></a>)</div>
 	<% end %>
 </div>
 
-<div>
-	<b>Kills</b>
+<div class='col-md-3'>
+	<b>Kills(<%= @kills.length %>)</b>
 	<br>
 	<% @kills.each do |assignment| %>
 	<div class='assignment' id='<%= assignment.id %>'><%= assignment.get_player.name %> killed <%= assignment.get_player_2.name %></div>
@@ -32,10 +32,14 @@
 </div>
 
 
-<div>
-	<b>Dead Players</b>
+<div class='col-md-1'>
+	<b>Dead Players (<%= @fails.length%>)</b>
 	<br>
 	<% @fails.each do |assignment| %>
-	<div id='<%= assignment.id %>'><%= assignment.get_player_2.name %> got pwned</div>
+	<div id='<%= assignment.id %>'><%= assignment.get_player.name %></div>
 	<% end %>
+</div>
+
+<div class = 'col-md-2'>
+	<b>Leaderboard</b>
 </div>

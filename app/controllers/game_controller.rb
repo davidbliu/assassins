@@ -11,11 +11,7 @@ class GameController < ApplicationController
 		@game = Game.where(name: 'test_game').first
 
 		assignment_id = params[:assignment_id].to_s
-		p 'this is assignment id'
-		p assignment_id
-
 		@game.register_kill(assignment_id)
 		render :nothing => true, :status => 200, :content_type => 'text/html'
-		# redirect_to root_url
 	end
 end

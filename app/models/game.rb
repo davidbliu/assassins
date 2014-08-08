@@ -89,16 +89,31 @@ class Game < ActiveRecord::Base
 		assignment = self.assignments.find(assignment_id)
 		winner_id = assignment.player_id
 		loser_id = assignment.player_2_id
-		loser_assignment = self.assignments.where(player_id: loser_id).first
+		loser_assignment = self.assignments.where(player_id: loser_id).where(status: 'incomplete').first
+		
+		if loser_assignment == nil
+			p 'no loser assignment'
+			return
+		end
 		if assignment.status != 'incomplete' or loser_assignment.status != 'incomplete'
+			p 'something is wrong, assignments arent incomplete'
+			# p Player.find(assignment.player_id).name
+			# p Player.find(assignment.player_2_id).name
+			# p Player.find(loser_assignment.player_id).name
+			# p Player.find(loser_assignment.player_2_id).name
+			p assignment.status
+			p loser_assignment.status
+			p assignment.status != 'incomplete'
+			p loser_assignment.status != 'incomplete'
 			p 'something is wrong, assignments arent incomplete'
 			return
 		end
+
 		assignment.status = 'complete'
 		loser_assignment.status = 'failed'
 		assignment.save
 		loser_assignment.save
-		p 'this is the loser assignment, it is incomplete '+loser_assignment.id.to_s
+		p 'this is the loser assignment, it is failed '+loser_assignment.id.to_s
 		p 'this is the winner assignment, it is complete '+assignment.id.to_s
 		#
 		# make new assignment
