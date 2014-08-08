@@ -3,7 +3,7 @@ Dockernotes::Application.routes.draw do
   resources :games
   root 'game#index'
 
-
+  get "/complete_assignment/:assignment_id", to: "game#complete_assignment"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

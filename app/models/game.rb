@@ -9,6 +9,17 @@ class Game < ActiveRecord::Base
 		return self.players.pluck(:name)
 	end	
 
+	def get_ongoing_assignments
+		return self.assignments.where(status: 'incomplete')
+	end
+
+	def get_killed_assignments
+		return self.assignments.where(status: 'complete')
+	end
+
+	def get_dead_assignments
+		return self.assignments.where(status: 'failed')
+	end
 	'''
 	algorithm described in README
 	'''
@@ -67,4 +78,37 @@ class Game < ActiveRecord::Base
 		end
 	end
 	# end of create assignments from ring
+
+	'''
+	player 1 killed player2. kill code already validated
+	'''
+	def register_kill(assignment_id)
+		#
+		# set statuses in both their assignments
+		#
+		assignment = self.assignments.find(assignment_id)
+		winner_id = assignment.player_id
+		loser_id = assignment.player_2_id
+		loser_assignment = self.assignments.where(player_id: loser_id).first
+		if assignment.status != 'incomplete' or loser_assignment.status != 'incomplete'
+			p 'something is wrong, assignments arent incomplete'
+			return
+		end
+		assignment.status = 'complete'
+		loser_assignment.status = 'failed'
+		assignment.save
+		loser_assignment.save
+		p 'this is the loser assignment, it is incomplete '+loser_assignment.id.to_s
+		p 'this is the winner assignment, it is complete '+assignment.id.to_s
+		#
+		# make new assignment
+		#
+		new_assignment = self.assignments.new
+		new_assignment.player_id = winner_id
+		new_assignment.player_2_id = loser_assignment.player_2_id
+		new_assignment.time_started = Time.now
+		new_assignment.status = 'incomplete'
+		new_assignment.save
+		p 'this is a new assignment, it is incomplete '+new_assignment.id.to_s
+	end
 end

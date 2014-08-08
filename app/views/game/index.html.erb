@@ -1,6 +1,8 @@
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type='text/javascript'>
 
+</script>
 <h1>Global View</h1>
 
 <div><b>Name:</b> <%= @game.name %></div>
@@ -14,20 +16,26 @@
 </div>
 
 <div>
-	<b>Assignments</b>
+	<b>Ongoing Assignments</b>
 	<br>
-	<% @game.assignments.each do |assignment| %>
-	<div><%= assignment.get_player.name %> has to kill <%= assignment.get_player_2.name %></div>
+	<% @ongoing.each do |assignment| %>
+	<div class='assignment' id='<%= assignment.id %>'><%= assignment.get_player.name %> has to kill <%= assignment.get_player_2.name %> (<%= assignment.status %>) (<a href = '/complete_assignment/<%= assignment.id %>'><%= assignment.id %></a>)</div>
 	<% end %>
 </div>
 
 <div>
-	<b>Top Players</b>
+	<b>Kills</b>
 	<br>
+	<% @kills.each do |assignment| %>
+	<div class='assignment' id='<%= assignment.id %>'><%= assignment.get_player.name %> killed <%= assignment.get_player_2.name %></div>
+	<% end %>
 </div>
 
 
 <div>
 	<b>Dead Players</b>
 	<br>
+	<% @fails.each do |assignment| %>
+	<div id='<%= assignment.id %>'><%= assignment.get_player_2.name %> got pwned</div>
+	<% end %>
 </div>
