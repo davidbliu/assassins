@@ -52,6 +52,7 @@ task :import_players => :environment do
 	p 'removing all old players'
 	Player.destroy_all
 
+	existing_names = []
 	index = 0
 	require 'yaml'
 	player_list = Array.new
@@ -72,11 +73,12 @@ task :import_players => :environment do
 		player.member_id = old_member_index
 		player.name = name
 		player.status = status
-		player.code = kill_code
+		player.code = Game.generate_name(existing_names)
 		player.committee = pl['committee']
 		player.save
 		p player.name
-		index = index + 1 
+		# index = index + 1 
+		existing_names << player.code
 	end
 end	
 task :global_view => :environment do
@@ -90,6 +92,14 @@ task :global_view => :environment do
 	p game.assignments.pluck(:player_id)
 end
 
+task :make_name => :environment do
+	names = []
+	for i in (0..89)
+		name = Game.generate_name(names)
+		names << name
+		p name
+	end
+end
 
 task :create_ring => :environment do
 	game = Game.where(name:'test_game').first

@@ -20,6 +20,24 @@ class Game < ActiveRecord::Base
 	def get_dead_assignments
 		return self.assignments.where(status: 'failed')
 	end
+
+	def get_assignments(player_id)
+		return self.assignments.where(player_id: player_id)
+	end
+
+	def is_correct_code(assignment_id, kill_code)
+		p_id = self.assignments.find(assignment_id).player_2_id
+		player_2 = self.players.find(p_id)
+		if player_2.code.to_s == kill_code.to_s
+			return true
+		end
+		return false
+	end
+
+	def do_storm
+		p 'killing off players that arent active'
+	end
+
 	'''
 	algorithm described in README
 	'''
@@ -126,4 +144,34 @@ class Game < ActiveRecord::Base
 		new_assignment.save
 		p 'this is a new assignment, it is incomplete '+new_assignment.id.to_s
 	end
+
+
+	def self.generate_name(existing_names)
+		first = ['stinky', 'lumpy', 'buttercup', 'gidget', 'crusty', 'greasy', 'fluffy', 'cheeseball', 'chim-chim', 'poopsie',
+		 'flunky', 'booger', 'pinky', 'zippy', 'goober', 'doofus', 'slimy', 'loopy', 'snotty', 'falafel', 'dorkey',
+		  'squeezit', 'oprah', 'skipper', 'dinky', 'zsa-zsa']
+
+		middle = ['diaper', 'toilet', 'giggle', 'bubble', 'girdle', 'barf', 'lizard', 'waffle', 'cootie', 'monkey',
+		 'potty', 'liver', 'banana', 'rhino', 'burger', 'hamster', 'toad', 'gizzard', 'pizza', 'gerbil', 'chicken',
+		  'pickle', 'chuckle', 'tofu', 'gorilla', 'stinker']
+
+		last = ['head', 'mouth', 'face', 'nose', 'tush', 'breath', 'pants', 'shorts', 'lips', 'honker', 'butt', 'brain',
+		 'tushie', 'chunks', 'hiney', 'biscuits', 'toes', 'buns', 'fanny', 'sniffer', 'sprinkles', 'kisser',
+		  'squirt', 'humperdinck', 'brains', 'juice']
+
+		f_name = first.sample
+		m_name = middle.sample
+		l_name = last.sample
+		name = f_name+'_'+m_name+'_'+l_name
+		while existing_names.include?(name) 
+			f_name = first.sample
+			m_name = middle.sample
+			l_name = last.sample
+			name = f_name+'_'+m_name+'_'+l_name
+		end
+		return name
+	end
+
+
+
 end
