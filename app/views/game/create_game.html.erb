@@ -3,43 +3,13 @@
 <script type='text/javascript'>
 
 </script>
-<h1>Global View</h1>
+<h1>Create Game</h1>
 
-<div><b>Name:</b> <%= @game.name %></div>
-
-<div class='col-md-2'>
-	<b>Players (<%= @game.players.length %>)</b>
-	<br>
-	<% @game.players.each do |player| %>
-	<div><a href = '/view_assignment/<%= player.id %>'><%= player.name %></a> (<%= player.code %>)</div>
-	<% end %>
-</div>
-
-<div class='col-md-4'>
-	<b>Ongoing Assignments (<%= @ongoing.length %>)</b>
-	<br>
-	<% @ongoing.each do |assignment| %>
-	<div class='assignment' id='<%= assignment.id %>'><%= assignment.get_player.name %> has to kill <%= assignment.get_player_2.name %> (<%= assignment.status %>) (<a href = '/complete_assignment/<%= assignment.id %>'><%= assignment.id %></a>)</div>
-	<% end %>
-</div>
-
-<div class='col-md-3'>
-	<b>Kills(<%= @kills.length %>)</b>
-	<br>
-	<% @kills.each do |assignment| %>
-	<div class='assignment' id='<%= assignment.id %>'><%= assignment.get_player.name %> killed <%= assignment.get_player_2.name %></div>
-	<% end %>
+<div>
+	<input type='text' placeholder='game name'></input>
 </div>
 
 
-<div class='col-md-1'>
-	<b>Dead Players (<%= @fails.length%>)</b>
-	<br>
-	<% @fails.each do |assignment| %>
-	<div id='<%= assignment.id %>'><%= assignment.get_player.name %></div>
-	<% end %>
-</div>
-
-<div class = 'col-md-2'>
-	<b>Leaderboard</b>
+<div>
+	<button>create game</button>
 </div>

@@ -21,8 +21,56 @@ class GameController < ApplicationController
 	end
 
 	def create_game
+		game = Game.where(name: 'test_game').first
 
+		#
+		# import players
+		#
+		p game.name+' is the game i will create players for homie'
+		p 'here are the players in this game'
+		p game.players
+		p 'removing all old players'
+		Player.destroy_all
 
+		existing_names = []
+		index = 0
+		require 'yaml'
+		player_list = Array.new
+		File.open('member_dump.yaml', "r") do |file|
+		  player_list = YAML::load(file)
+		end
+		for pl in player_list
+			player_name = pl['name']
+			old_member_index = index
+			name = player_name
+			status = 'alive'
+			kill_code = index.to_s
+			#
+			# save player in db
+			#
+			# player = Player.new
+			player = game.players.new
+			player.member_id = old_member_index
+			player.name = name
+			player.status = status
+			player.code = Game.generate_name(existing_names)
+			player.committee = pl['committee']
+			player.save
+			p player.name
+			# index = index + 1 
+			existing_names << player.code
+		end
+		#
+		# create assignments
+		#
+		p 'destroying old assignments'
+		game.assignments.destroy_all
+		p 'creating assignments...'
+		ring = game.create_ring
+		game.create_assignments_from_ring(ring)
+
+		result = 'created your game'
+		render json: result
 	end
 
 	def complete_assignment
