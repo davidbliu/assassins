@@ -36,8 +36,34 @@ class Game < ActiveRecord::Base
 
 	def do_storm
 		p 'killing off players that arent active'
+		kills = self.get_killed_assignments
+		active_players = kills.pluck(:player_id).uniq
+		p active_players
+		# render json: 'storm done'
+		# players_who_have_killed = 
+
 	end
 
+	#
+	# gets current ring from the exising unfinished assignments
+	#
+	def get_ring_from_assignments
+		ring = Array.new
+		ongoing_assignments = self.assignments.where(status: 'incomplete')
+		num_assignments = ongoing_assignments.length
+		players = self.players
+		curr_assignment = ongoing_assignments.first
+		curr_player = players.find(curr_assignment.player_id)
+		ring << curr_player
+		for i in (1..num_assignments-1)
+			curr_assignment = ongoing_assignments.where(player_id: curr_assignment.player_2_id).first
+			curr_player = players.find(curr_assignment.player_id)
+			ring << curr_player
+		end
+
+		# @ring = ring
+		return ring
+	end
 	'''
 	algorithm described in README
 	'''

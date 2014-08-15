@@ -20,6 +20,41 @@ class GameController < ApplicationController
 		end 
 	end
 
+	#
+	# allows you to reset game stuff
+	#
+	def game_settings
+		# ring = ['one', 'two', 'three']
+		game = Game.where(name: 'test_game').first
+		@ring = game.get_ring_from_assignments
+
+
+	end
+	def do_storm
+		game = Game.where(name: 'test_game').first
+		game.do_storm
+		render json: 'storm done'
+	end
+	def re_ring
+		game = Game.where(name: 'test_game').first
+		player_ids = params[:ring_ids]
+		p player_ids
+
+		player_ring = []
+		for id in player_ids
+			player = Player.find(id.to_i)
+			player_ring << player
+		end
+
+		# if player_ring.length != game.players.length
+		# 	p 'they are not the same length'
+		# 	p player_ring.length
+		# 	p game.players.length
+		# else
+		game.create_assignments_from_ring(player_ring)
+		# end
+		render json: 'good'
+	end
 	def create_game
 		game = Game.where(name: 'test_game').first
 

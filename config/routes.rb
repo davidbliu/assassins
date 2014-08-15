@@ -4,8 +4,9 @@ Dockernotes::Application.routes.draw do
   root 'game#index'
   get "/complete_assignment/:assignment_id", to: "game#complete_assignment"
 
-  get '/create_game', to: 'game#create_game'
-  get '/do_storm/:game_id', to: 'game#do_storm'
+  get '/game_settings', to: 'game#game_settings'
+  get '/re_ring', to: 'game#re_ring'
+  get '/do_storm', to: 'game#do_storm'
   get "/confirm_kill", to: "game#confirm_kill"
   get "/view_assignment/:player_id", to: "game#view_assignment"
   # The priority is based upon order of creation: first created -> highest priority.

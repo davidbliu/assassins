@@ -1,0 +1,57 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<style>
+		header, section {
+			display: block;
+		}
+
+		
+		li.sortable-placeholder {
+			border: 1px dashed #CCC;
+			background: none;
+		}
+	</style>
+<link href='http://fonts.googleapis.com/css?family=Droid+Serif' rel='stylesheet' type='text/css'>
+
+<%= javascript_include_tag "jquery.sortable.min.js" %>
+<script type='text/javascript'>
+function re_ring_actions(){
+	var ring_ids = [];
+	$("#re-ring-btn").click(function(){
+		$('li').each(function(){
+			ring_ids.push($(this).attr('id'));
+		});
+		console.log(ring_ids);
+		$.ajax({
+	      url:'/re_ring',
+	      type: "GET",
+	      data: {"ring_ids": ring_ids},
+	      success:function(data){
+	      },
+	      complete:function(){
+	      	// location.reload();
+	      	alert('reload to see changes');
+	      },
+	      error:function (xhr, textStatus, thrownError){}
+	  	});
+	});
+
+	
+}
+$(document).ready(function(){
+	$('.sortable').sortable();
+	re_ring_actions();
+});
+</script>
+
+<h1>Game Settings</h1>
+<button type='btn' class='btn-btn-default'>do_storm</button>
+<h2>Ring Settings</h2>
+		<ol class="sortable list">
+			<% @ring.each do |player| %>
+			<li id='<%= player.id %>' class='<%= player.committee %>'><%= player.name %></li>
+			<% end %>
+		</ol>
+		<button id='re-ring-btn' type='btn' class='btn-btn-default'>re-ring</button>
