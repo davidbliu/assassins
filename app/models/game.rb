@@ -34,6 +34,14 @@ class Game < ActiveRecord::Base
 		return false
 	end
 
+	def is_correct_reverse_code(assignment_id, kill_code):
+		p_id = self.assignments.find(assignment_id).player_id
+		player = self.players.find(p_id)
+		if player.code.to_s == kill_code.to_s
+			return true
+		end
+		return false
+
 	def do_storm
 		p 'killing off players that arent active'
 		kills = self.get_killed_assignments
@@ -126,7 +134,7 @@ class Game < ActiveRecord::Base
 	'''
 	player 1 killed player2. kill code already validated
 	'''
-	def register_kill(assignment_id)
+	def register_kill(assignment_id, is_reverse=false)
 		#
 		# set statuses in both their assignments
 		#
@@ -140,15 +148,6 @@ class Game < ActiveRecord::Base
 			return
 		end
 		if assignment.status != 'incomplete' or loser_assignment.status != 'incomplete'
-			p 'something is wrong, assignments arent incomplete'
-			# p Player.find(assignment.player_id).name
-			# p Player.find(assignment.player_2_id).name
-			# p Player.find(loser_assignment.player_id).name
-			# p Player.find(loser_assignment.player_2_id).name
-			p assignment.status
-			p loser_assignment.status
-			p assignment.status != 'incomplete'
-			p loser_assignment.status != 'incomplete'
 			p 'something is wrong, assignments arent incomplete'
 			return
 		end
@@ -171,6 +170,9 @@ class Game < ActiveRecord::Base
 		p 'this is a new assignment, it is incomplete '+new_assignment.id.to_s
 	end
 
+	def register_reverse_kill(assignment_id)
+
+	end
 
 	def self.generate_name(existing_names)
 		first = ['stinky', 'lumpy', 'buttercup', 'gidget', 'crusty', 'greasy', 'fluffy', 'cheeseball', 'chim-chim', 'poopsie',

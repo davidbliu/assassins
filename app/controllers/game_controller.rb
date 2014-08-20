@@ -20,6 +20,22 @@ class GameController < ApplicationController
 		end 
 	end
 
+	def confirm_reverse_kill
+		@game = Game.where(name: 'test_game').first
+
+		player_id = params[:player_id]
+		kill_code = params[:kill_code]
+
+		# find the assignment against this player (who needs to kill this one)
+		assignment_against = @game.assignments.where(player_2_id: player_id).first
+
+		if @game.is_correct_code(assignment_against.id, kill_code)
+			redirect_to(:controller=>'game', :action=>'complete_reverse_assignment', :assignment_id => assignment_against.id)
+		else
+			render :nothing => true, :status => 500, :content_type => 'text/html'
+		end
+	end
+
 	#
 	# allows you to reset game stuff
 	#
@@ -108,13 +124,21 @@ class GameController < ApplicationController
 		render json: result
 	end
 
+	def complete_reverse_assignment
+		@game = Game.where(name: 'test_game').first
+		assignment_id = params[:assignment_id].to_s
+		@game.register_reverse_kill(assignment_id)
+		render :nothing => true, :status => 200, :content_type => 'text/html'
+	end
+
 	def complete_assignment
 		@game = Game.where(name: 'test_game').first
-
 		assignment_id = params[:assignment_id].to_s
 		@game.register_kill(assignment_id)
 		render :nothing => true, :status => 200, :content_type => 'text/html'
 	end
+
+
 
 	def view_assignment
 		@game = Game.where(name: 'test_game').first

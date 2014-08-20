@@ -3,11 +3,15 @@ Dockernotes::Application.routes.draw do
   resources :games
   root 'game#index'
   get "/complete_assignment/:assignment_id", to: "game#complete_assignment"
+  get "/complete_reverse_kill/:assignment_id", to: "game#complete_reverse_kill"
 
   get '/game_settings', to: 'game#game_settings'
   get '/re_ring', to: 'game#re_ring'
   get '/do_storm', to: 'game#do_storm'
+
+  # wtf does confirm do?
   get "/confirm_kill", to: "game#confirm_kill"
+  get "/confirm_reverse_kill", to: "game#confirm_reverse_kill"
   get "/view_assignment/:player_id", to: "game#view_assignment"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
