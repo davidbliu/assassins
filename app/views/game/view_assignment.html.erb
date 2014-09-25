@@ -27,18 +27,18 @@ $(document).ready(function(){
 	// 
 	// handle reverse kills
 	// 
-	$(".kill-btn").click(function(){
+	$(".reverse-kill-btn").click(function(){
 		var r = prompt('what is kill code?');
 		var kill_code = r;
-		var assignment_id = $(this).attr('id');
+		var player_id = $(this).attr('id');
 		var failed = false;
 		$.ajax({
 		    url: "/confirm_reverse_kill",
 		    type: "GET",
-		    data: { "assignment_id": assignment_id, 'kill_code': kill_code },
+		    data: { "player_id": player_id, 'kill_code': kill_code },
 		  }).complete(function(data) {
 		  	if (!failed){
-		  		alert('good job');
+		  		alert('good job reverse killed');
 		  		location.reload();
 		  	}
 		  	
@@ -59,7 +59,7 @@ $(document).ready(function(){
 
 <div>
 	<button id='<%= @current_assignment.id %>' type = 'btn' class = 'btn btn-default kill-btn'>i killed <% @ongoing_names.each do |name| %><%= name %> <% end %></button>
-	<button type='btn' class = 'btn btn-default reverse-kill-btn'>reverse kill</button>
+	<button id = '<%= @player.id %>' type='btn' class = 'btn btn-default reverse-kill-btn'>reverse kill</button>
 
 </div>
 

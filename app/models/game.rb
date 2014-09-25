@@ -34,14 +34,14 @@ class Game < ActiveRecord::Base
 		return false
 	end
 
-	def is_correct_reverse_code(assignment_id, kill_code):
+	def is_correct_reverse_code(assignment_id, kill_code)
 		p_id = self.assignments.find(assignment_id).player_id
 		player = self.players.find(p_id)
 		if player.code.to_s == kill_code.to_s
 			return true
 		end
 		return false
-
+	end
 	def do_storm
 		p 'killing off players that arent active'
 		kills = self.get_killed_assignments
@@ -171,7 +171,45 @@ class Game < ActiveRecord::Base
 	end
 
 	def register_reverse_kill(assignment_id)
+		#
+		# set statuses in both their assignments
+		#
 
+		p 'REGISTERING REVERSE KILL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+		# return
+		assignment = self.assignments.find(assignment_id)
+		reverser_id = assignment.player_2_id
+		loser_id = assignment.player_id
+
+		# other assignemnt is the guy who shoould have killed the guy who just got reverse f'ed
+		other_assignment = self.assignments.where(player_2_id: loser_id).first
+		# loser_assignment = self.assignments.where(player_id: loser_id).where(status: 'incomplete').first
+		
+		if other_assignment == nil
+			p 'no other assignment'
+			return
+		end
+
+		assignment.status = 'reverse'
+		other_assignment.status = 'canceled'
+		assignment.save
+		other_assignment.save
+
+		
+		# make new assignment if doesnt already exist
+		new_player_1 = other_assignment.player_id
+		new_player_2 = reverser_id
+		if self.assignments.where(player_id: new_player_1).where(player_2_id: new_player_2).length > 0
+			p 'doent exist yet'
+		else
+			p 'creating new assignment'
+			new_assignment = self.assignments.new
+			new_assignment.player_id = other_assignment.player_id
+			new_assignment.player_2_id = reverser_id
+			new_assignment.time_started = Time.now
+			new_assignment.status = 'incomplete'
+			new_assignment.save
+		end
 	end
 
 	def self.generate_name(existing_names)

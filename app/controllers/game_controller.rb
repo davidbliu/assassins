@@ -1,4 +1,8 @@
 class GameController < ApplicationController
+	
+	def assignments
+		@game = Game.where(name: 'test_game').first
+	end
 	def index
 		@game = Game.where(name: 'test_game').first
 
@@ -29,7 +33,10 @@ class GameController < ApplicationController
 		# find the assignment against this player (who needs to kill this one)
 		assignment_against = @game.assignments.where(player_2_id: player_id).first
 
-		if @game.is_correct_code(assignment_against.id, kill_code)
+		p 'here is assignment against'
+		p assignment_against
+		if @game.is_correct_reverse_code(assignment_against.id, kill_code)
+			p 'this is the correct one'
 			redirect_to(:controller=>'game', :action=>'complete_reverse_assignment', :assignment_id => assignment_against.id)
 		else
 			render :nothing => true, :status => 500, :content_type => 'text/html'
