@@ -6,19 +6,11 @@ RUN apt-get update
 RUN apt-get install -y ruby ruby-dev libpq-dev build-essential
 RUN gem install sinatra bundler --no-ri --no-rdoc
 
-#
-# install sshd
-#
-RUN apt-get install -y sudo ntp openssh-server supervisor
-RUN mkdir -p /var/run/sshd
-RUN adduser --gecos "" container
-RUN echo 'container:container' | sudo -S chpasswd
-RUN echo 'container ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-RUN sed -i -e 's/^\(session\s\+required\s\+pam_loginuid.so$\)/#\1/' /etc/pam.d/sshd
 
-
+#
+# add files
+#
 ADD . /opt/assassins
-
 WORKDIR /opt/assassins
 RUN bundle install
 

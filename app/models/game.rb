@@ -52,6 +52,8 @@ class Game < ActiveRecord::Base
 
 	end
 
+
+
 	#
 	# gets current ring from the exising unfinished assignments
 	#
@@ -113,7 +115,7 @@ class Game < ActiveRecord::Base
 		#
 		# remove previous assignments
 		#
-		self.assignments.destroy_all
+		self.assignments.where(status:"incomplete").destroy_all
 		assignments = []
 		end_index = ring.clone.length-1
 		ring.append(ring[0])
@@ -170,6 +172,18 @@ class Game < ActiveRecord::Base
 		p 'this is a new assignment, it is incomplete '+new_assignment.id.to_s
 	end
 
+
+	def convert_reverse_kills
+		reverse_kill = self.assignments.where(status:"reverse")
+		reverse_kill.each do |rk|
+			rk.status = "complete"
+			new_player_id = rk.player_2_id
+			new_player_2_id = rk.player_id
+			rk.player_id = new_player_id
+			rk.player_2_id = new_player_2_id
+			rk.save
+		end
+	end
 	def register_reverse_kill(assignment_id)
 		#
 		# set statuses in both their assignments
@@ -210,6 +224,8 @@ class Game < ActiveRecord::Base
 			new_assignment.status = 'incomplete'
 			new_assignment.save
 		end
+
+		self.convert_reverse_kills
 	end
 
 	def self.generate_name(existing_names)

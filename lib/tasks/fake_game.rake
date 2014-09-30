@@ -45,7 +45,7 @@ task :create_players => :environment do
 end
 
 task :import_players => :environment do
-	game = Game.where(name:'test_game').first
+	game = Game.where(name:'test_game').first_or_create
 	p game.name+' is the game i will create players for homie'
 	p 'here are the players in this game'
 	p game.players
@@ -56,7 +56,7 @@ task :import_players => :environment do
 	index = 0
 	require 'yaml'
 	player_list = Array.new
-	File.open('member_dump.yaml', "r") do |file|
+	File.open('member_dump_current.yaml', "r") do |file|
 	  player_list = YAML::load(file)
 	end
 	for pl in player_list

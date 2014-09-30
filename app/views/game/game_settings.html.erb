@@ -26,16 +26,17 @@ function re_ring_actions(){
 		console.log(ring_ids);
 		$.ajax({
 	      url:'/re_ring',
-	      type: "GET",
+	      type: "POST",
 	      data: {"ring_ids": ring_ids},
 	      success:function(data){
+	      	// alert('reload to see changes');
+	      	window.location.href = "/";
 	      },
 	      complete:function(){
-	      	// location.reload();
-	      	alert('reload to see changes');
 	      },
-	      error:function (xhr, textStatus, thrownError){}
-	  	});
+	      error:function (xhr, textStatus, thrownError){
+	      	alert("failed");
+	  	}});
 	});
 
 	

@@ -1,5 +1,18 @@
 class GameController < ApplicationController
+	skip_before_filter :verify_authenticity_token, :only => [:re_ring]
 	
+	#
+	# change all reverse kills so they show up as normal kills
+	#
+	def convert_reverse_kills
+		@game = Game.where(name: 'test_game').first
+		@game.convert_reverse_kills
+		render json: "your reverse kills have been converted"
+	end
+	def testing
+		@game = Game.where(name: 'test_game').first
+		@assignments = @game.assignments
+	end
 	def assignments
 		@game = Game.where(name: 'test_game').first
 	end
@@ -31,7 +44,7 @@ class GameController < ApplicationController
 		kill_code = params[:kill_code]
 
 		# find the assignment against this player (who needs to kill this one)
-		assignment_against = @game.assignments.where(player_2_id: player_id).first
+		assignment_against = @game.assignments.where(player_2_id: player_id).where(status:"incomplete").first
 
 		p 'here is assignment against'
 		p assignment_against
@@ -39,6 +52,8 @@ class GameController < ApplicationController
 			p 'this is the correct one'
 			redirect_to(:controller=>'game', :action=>'complete_reverse_assignment', :assignment_id => assignment_against.id)
 		else
+			p "wrong reverse kill code homie"
+			p Player.find(assignment_against.player_id).name
 			render :nothing => true, :status => 500, :content_type => 'text/html'
 		end
 	end
@@ -53,6 +68,14 @@ class GameController < ApplicationController
 
 
 	end
+
+	def generate_assignments
+		game = Game.where(name:'test_game').first
+		assigned = game.create_ring
+		game.create_assignments_from_ring(assigned)
+		redirect_to root_url
+	end
+
 	def do_storm
 		game = Game.where(name: 'test_game').first
 		game.do_storm
@@ -68,15 +91,17 @@ class GameController < ApplicationController
 			player = Player.find(id.to_i)
 			player_ring << player
 		end
-
+		# p 'this is the player ring'
 		# if player_ring.length != game.players.length
 		# 	p 'they are not the same length'
 		# 	p player_ring.length
 		# 	p game.players.length
 		# else
+		# game.assignments.destroy_all
 		game.create_assignments_from_ring(player_ring)
 		# end
-		render json: 'good'
+		# render json: 'good'
+		render :nothing => true, :status => 200, :content_type => 'text/html'
 	end
 	def create_game
 		game = Game.where(name: 'test_game').first
@@ -143,6 +168,7 @@ class GameController < ApplicationController
 		assignment_id = params[:assignment_id].to_s
 		@game.register_kill(assignment_id)
 		render :nothing => true, :status => 200, :content_type => 'text/html'
+		# redirect_to root_url
 	end
 
 
