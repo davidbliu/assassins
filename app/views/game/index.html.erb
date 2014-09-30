@@ -11,7 +11,7 @@
 	<b>Players (<%= @game.players.length %>)</b>
 	<br>
 	<% @game.players.each do |player| %>
-	<div><a href = '/view_assignment/<%= player.id %>'><%= player.name %></a> (<%= player.code %>)</div>
+	<div><a href = '/view_assignment/<%= player.member_id %>'><%= player.name %></a> (<%= player.code %>)</div>
 	<% end %>
 </div>
 

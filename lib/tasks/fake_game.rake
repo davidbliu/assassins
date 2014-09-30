@@ -61,7 +61,8 @@ task :import_players => :environment do
 	end
 	for pl in player_list
 		player_name = pl['name']
-		old_member_index = index
+		# old_member_index = index
+		old_member_index = pl['uid']
 		name = player_name
 		status = 'alive'
 		kill_code = index.to_s

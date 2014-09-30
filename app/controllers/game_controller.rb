@@ -176,8 +176,12 @@ class GameController < ApplicationController
 	def view_assignment
 		@game = Game.where(name: 'test_game').first
 
-		player_id = params[:player_id].to_s
-		@player = @game.players.find(player_id)
+		player_uid = params[:player_id].to_s
+		# @player = @game.players.find(player_id)
+		@player = @game.players.where(member_id: player_uid).first
+		player_id = @player.id
+		p @player.name
+		p 'that was the player!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
 		@current_assignments = @game.assignments.where(player_id: player_id).where(status: 'incomplete')
 		@ongoing_assignments = @current_assignments.pluck(:player_2_id)
 		@kills = @game.assignments.where(player_id: player_id).where(status: 'complete').pluck(:player_2_id)
