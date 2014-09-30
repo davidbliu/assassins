@@ -33,13 +33,14 @@
 
 
 <div class='col-md-1'>
-	<b>Dead Players (<%= @fails.length%>)</b>
+	<b>Dead Players (<%= @kills.length%>)</b>
 	<br>
-	<% @fails.each do |assignment| %>
-	<div id='<%= assignment.id %>'><%= assignment.get_player.name %></div>
+	<% @kills.each do |assignment| %>
+	<div id='<%= assignment.id %>'><%= assignment.get_player_2.name %></div>
 	<% end %>
 </div>
 
 <div class = 'col-md-2'>
 	<b>Leaderboard</b>
+	<div><%= @leaderboard %></div>
 </div>

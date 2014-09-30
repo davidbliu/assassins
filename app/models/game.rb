@@ -17,9 +17,25 @@ class Game < ActiveRecord::Base
 		return self.assignments.where(status: 'complete')
 	end
 
-	def get_dead_assignments
-		return self.assignments.where(status: 'failed')
+	# def get_dead_assignments
+	# 	return self.assignments.where(status: 'failed')
+	# end
+
+	def get_leaderboard
+		kills = self.assignments.where(status: 'complete')
+		killer_ids = kills.pluck(:player_id)
+		# return killer_ids
+		leaderboard = Array.new
+		killer_ids.uniq.each do |elem|
+			leader = Hash.new
+			leader["name"] = Player.find(elem).name
+			leader["kills"] = killer_ids.count(elem).to_i
+		 	leaderboard << leader
+		end
+		sorted_leaderboard = leaderboard.sort_by { |leader| leader["kills"] }
+		return sorted_leaderboard.reverse
 	end
+
 
 	def get_assignments(player_id)
 		return self.assignments.where(player_id: player_id)
@@ -188,7 +204,6 @@ class Game < ActiveRecord::Base
 		#
 		# set statuses in both their assignments
 		#
-
 		p 'REGISTERING REVERSE KILL!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
 		# return
 		assignment = self.assignments.find(assignment_id)

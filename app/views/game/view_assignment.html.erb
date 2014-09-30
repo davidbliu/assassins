@@ -1,7 +1,11 @@
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
-<script type='text/javascript'>
+
+
+<div id='assassins-wrapper'>
+
+
+<script type='text/javascript' id = "runscript">
+var host_address = 'http://'+'<%= @host_address %>';
 $(document).ready(function(){
 	$(".kill-btn").click(function(){
 		var r = prompt('what is <% @ongoing_names.each do |name| %><%= name %> <% end %> kill code?');
@@ -9,10 +13,10 @@ $(document).ready(function(){
 		var assignment_id = $(this).attr('id');
 		var failed = false;
 		$.ajax({
-		    url: "/confirm_kill",
+		    url: host_address+"/confirm_kill",
 		    type: "GET",
 		    data: { "assignment_id": assignment_id, 'kill_code': kill_code },
-		  }).complete(function(data) {
+		  }).success(function(data) {
 		  	if (!failed){
 		  		alert('good job');
 		  		location.reload();
@@ -33,10 +37,10 @@ $(document).ready(function(){
 		var player_id = $(this).attr('id');
 		var failed = false;
 		$.ajax({
-		    url: "/confirm_reverse_kill",
+		    url: host_address+"/confirm_reverse_kill",
 		    type: "GET",
 		    data: { "player_id": player_id, 'kill_code': kill_code },
-		  }).complete(function(data) {
+		  }).success(function(data) {
 		  	if (!failed){
 		  		alert('good job reverse killed');
 		  		location.reload();
@@ -48,24 +52,67 @@ $(document).ready(function(){
 		    alert('failed');
 		  });
 	});
+	$('.assignment-info-toggle').click(function(){
+		$('.assignment-info').toggle();
+	});
 });
+
+
 </script>
+<style type='text/css'>
+.assignment-info-toggle{
+	cursor:pointer;
+}
+</style>
 
 <% if @current_assignment %>
-<h1>Welcome <%= @player.code %>, You're alive!</h1>
-<h2>You have to kill <% @ongoing_names.each do |name| %><%= name %> <% end %></h2>
+<h2>Welcome <%= @player.name %>, You're alive!</h2>
+<h3 class = 'assignment-info-toggle'>click here to view/hide assignment info</h3> 
 
-<h2>You killed <% @killed_names.each do |name| %><%= name %> <% end %></h2>
+<div class = 'assignment-info' style='display:none'>
+	<div>your kill code is <%= @player.code %></div>
+	<div>You have to kill <% @ongoing_names.each do |name| %><%= name %> <% end %></div>
 
-<div>
-	<button id='<%= @current_assignment.id %>' type = 'btn' class = 'btn btn-default kill-btn'>i killed <% @ongoing_names.each do |name| %><%= name %> <% end %></button>
-	<button id = '<%= @player.id %>' type='btn' class = 'btn btn-default reverse-kill-btn'>reverse kill</button>
+	<div>You killed <% @killed_names.each do |name| %><%= name %> <% end %></div>
 
+	<div class= 'kill-buttons-div'>
+		<button id='<%= @current_assignment.id %>' type = 'btn' class = 'btn btn-default kill-btn'>i killed <% @ongoing_names.each do |name| %><%= name %> <% end %></button>
+		<button id = '<%= @player.id %>' type='btn' class = 'btn btn-default reverse-kill-btn'>reverse kill</button>
+	</div>
 </div>
 
 
 <% else %>
-<h1>Welcome <%= @player.code %>, You're dead</h1>
-<h2>You killed <% @killed_names.each do |name| %><%= name %> <% end %></h2>
-<h2>You got killed by <% @killer_names.each do |name| %><%= name %> <% end %></h2>
+<h2>Welcome <%= @player.name %>, You're dead</h2>
+<h3>your kill code was <%= @player.code %></h3>
+<h3>You killed <% @killed_names.each do |name| %><%= name %> <% end %></h3>
+<h3>You got killed by <% @killer_names.each do |name| %><%= name %> <% end %></h3>
 <% end %>
+
+
+<h2>Leaderboard</h2>
+<div id ='leaderboard'>
+	<ol id='leaderboard-list'>
+	<% @leaderboard.each do |leader| %>
+	<li><%= leader["name"] %> (<%= leader["kills"] %>)</li>
+	<% end %>
+	</ol>
+</div>
+<h2>Dead People</h2>
+<div id ='deadboard'>
+	<ul id='dead-list'>
+	<% @all_kills.each do |assignment| %>
+	<li><%= assignment.get_player_2.name %> got shanked</li>
+	<% end %>
+	</ul>
+</div>
+
+
+
+
+
+
+</div>
+<!-- end of wrapper -->
+
+

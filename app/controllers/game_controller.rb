@@ -20,8 +20,9 @@ class GameController < ApplicationController
 		@game = Game.where(name: 'test_game').first
 
 		@kills = @game.assignments.where(status: 'complete')
-		@fails = @game.assignments.where(status: 'failed')
+		# @fails = @game.assignments.where(status: 'failed')
 		@ongoing = @game.assignments.where(status: 'incomplete')
+		@leaderboard = @game.get_leaderboard.take(10)
 	end	
 
 	def confirm_kill
@@ -70,7 +71,11 @@ class GameController < ApplicationController
 	end
 
 	def generate_assignments
+		#
+		# completely reset the game
+		#
 		game = Game.where(name:'test_game').first
+		game.assignments.destroy_all
 		assigned = game.create_ring
 		game.create_assignments_from_ring(assigned)
 		redirect_to root_url
@@ -174,6 +179,7 @@ class GameController < ApplicationController
 
 
 	def view_assignment
+		@host_address = ENV['ASSASSINS_HOST']
 		@game = Game.where(name: 'test_game').first
 
 		player_uid = params[:player_id].to_s
@@ -194,6 +200,12 @@ class GameController < ApplicationController
 		@ongoing_names = @game.players.where('id IN (?)', @ongoing_assignments).pluck(:name)
 		@killed_names = @game.players.where('id IN (?)', @kills).pluck(:name)
 		@killer_names = @game.players.where('id IN (?)', @killed_me).pluck(:name)
+
+		#
+		# game statistics
+		#
+		@all_kills = @game.assignments.where(status: 'complete')
+		@leaderboard = @game.get_leaderboard.take(10)
 	end
 
 end
