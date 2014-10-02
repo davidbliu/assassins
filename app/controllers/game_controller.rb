@@ -107,7 +107,10 @@ class GameController < ApplicationController
 
 	def do_storm
 		game = Game.where(name: 'test_game').first
-		game.do_storm
+		if not params[:storm_number]
+			render json: 'please enter a storm number'
+		end
+		game.do_storm(params[:storm_number])
 		render json: 'storm done'
 	end
 	def re_ring

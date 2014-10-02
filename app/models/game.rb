@@ -30,6 +30,7 @@ class Game < ActiveRecord::Base
 			leader = Hash.new
 			leader["name"] = Player.find(elem).name
 			leader["kills"] = killer_ids.count(elem).to_i
+			leader["id"] = elem
 		 	leaderboard << leader
 		end
 		sorted_leaderboard = leaderboard.sort_by { |leader| leader["kills"] }
@@ -58,13 +59,29 @@ class Game < ActiveRecord::Base
 		end
 		return false
 	end
-	def do_storm
+	def do_storm(wave_number)
 		p 'killing off players that arent active'
-		kills = self.get_killed_assignments
-		active_players = kills.pluck(:player_id).uniq
-		p active_players
-		# render json: 'storm done'
-		# players_who_have_killed = 
+		p 'ahasdlfjsldkfjahahahhahahahahahahahahahahahahahahahaha'
+		leaderboard = self.get_leaderboard
+		surviving_players = Array.new
+		leaderboard.each do |leader|
+			if leader["kills"].to_i >= wave_number and leader["name"] != "Chicken Katsu"
+				# keep in game
+				surviving_players << Player.find(leader["id"])
+			end
+		end
+
+		#
+		# if you're not a surviving player, get rekt
+		#
+		for assignment in self.assignments.where(status:"incomplete").dup
+			player = Player.find(assignment.player_id)
+			if not surviving_players.include? player
+				# get rekt
+				self.remove_player(player.id)
+			end
+		end
+		self.create_assignments_from_ring(surviving_players)
 
 	end
 
