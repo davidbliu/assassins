@@ -8,7 +8,7 @@
 var host_address = 'http://'+'<%= @host_address %>';
 $(document).ready(function(){
 	$(".kill-btn").click(function(){
-		var r = prompt('what is <% @ongoing_names.each do |name| %><%= name %> <% end %> kill code?');
+		var r = prompt("what is <% @ongoing_names.each do |name| %><%= name %> <% end %>'s kill code?");
 		var kill_code = r;
 		var assignment_id = $(this).attr('id');
 		var failed = false;
@@ -32,7 +32,7 @@ $(document).ready(function(){
 	// handle reverse kills
 	// 
 	$(".reverse-kill-btn").click(function(){
-		var r = prompt('what is kill code?');
+		var r = prompt('what is your assassins kill code?');
 		var kill_code = r;
 		var player_id = $(this).attr('id');
 		var failed = false;
@@ -98,7 +98,7 @@ $(document).ready(function(){
 	<% end %>
 	</ol>
 </div>
-<h2>Dead People</h2>
+<h2>Dead People (<%= @all_kills.length %>)</h2>
 <div id ='deadboard'>
 	<ul id='dead-list'>
 	<% @all_kills.each do |assignment| %>

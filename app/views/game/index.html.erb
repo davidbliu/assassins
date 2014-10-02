@@ -19,7 +19,7 @@
 	<b>Ongoing Assignments (<%= @ongoing.length %>)</b>
 	<br>
 	<% @ongoing.each do |assignment| %>
-	<div class='assignment' id='<%= assignment.id %>'><%= assignment.get_player.name %> has to kill <%= assignment.get_player_2.name %> (<%= assignment.status %>) (<a href = '/complete_assignment/<%= assignment.id %>'><%= assignment.id %></a>)</div>
+	<div class='assignment' id='<%= assignment.id %>'><%= assignment.get_player.name %> has to kill <%= assignment.get_player_2.name %> (<%= assignment.status %>) (<a href = '/complete_assignment/<%= assignment.id %>'><%= assignment.id %></a>) (<a href = "/remove_player_from_game?player_id=<%= assignment.get_player.id %>">remove</a>)</div>
 	<% end %>
 </div>
 
@@ -33,7 +33,7 @@
 
 
 <div class='col-md-1'>
-	<b>Dead Players (<%= @kills.length%>)</b>
+	<b>Dead Players (<%= @kills.length %>)</b>
 	<br>
 	<% @kills.each do |assignment| %>
 	<div id='<%= assignment.id %>'><%= assignment.get_player_2.name %></div>

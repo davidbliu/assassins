@@ -1,6 +1,19 @@
 class GameController < ApplicationController
 	skip_before_filter :verify_authenticity_token, :only => [:re_ring]
 	
+
+	def remove_player_from_game
+		@game = Game.where(name: 'test_game').first
+		player = params[:player_id]
+		if not player
+			render json: "no player id supplied"
+			return
+		end
+		@game.remove_player(player)
+		redirect_to root_url
+
+			
+	end
 	#
 	# change all reverse kills so they show up as normal kills
 	#
@@ -78,6 +91,17 @@ class GameController < ApplicationController
 		game.assignments.destroy_all
 		assigned = game.create_ring
 		game.create_assignments_from_ring(assigned)
+
+		#
+		# create dummer player if he doesn't exist
+		#
+		if(game.players.where(name: "Chicken Katsu").length < 1)
+			player = game.players.new
+			player.name = "Chicken Katsu"
+			player.status = 'alive'
+			player.code = "Salmon is Better Doe"
+			player.save
+		end
 		redirect_to root_url
 	end
 

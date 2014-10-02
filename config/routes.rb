@@ -20,6 +20,8 @@ Dockernotes::Application.routes.draw do
 
   get "/convert_reverse_kills", to: "game#convert_reverse_kills"
   get "/testing", to: "game#testing"
+
+  get "/remove_player_from_game", to:"game#remove_player_from_game"
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

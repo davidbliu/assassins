@@ -94,6 +94,8 @@ class Game < ActiveRecord::Base
 	algorithm described in README
 	'''
 	def create_ring(players = self.players, blacklist_size = 3)
+		self.players.where(name:"Chicken Katsu").destroy_all
+		players = self.players
 		committees = players.uniq.collect(&:committee)
 		num_players = players.length
 		blacklist = Queue.new
@@ -188,7 +190,51 @@ class Game < ActiveRecord::Base
 		p 'this is a new assignment, it is incomplete '+new_assignment.id.to_s
 	end
 
+	def remove_player(player_id)
+		p 'the players id iwas '+player_id.to_s
+		p 'removing '+Player.find(player_id).name
+		# get player's assignment
+		players_assignment = self.assignments.where(player_id: player_id).where(status: 'incomplete').first
+		player_killer_assignment = self.assignments.where(player_2_id: player_id).where(status: 'incomplete').first
 
+		p 'asdlkfjalskdjflkasjdlkfjslkdjlfskjldfjlsdjlfjsldkjlfkjlj'
+		p players_assignment
+		p player_killer_assignment
+
+
+		new_killer = player_killer_assignment.player_id
+		new_target = players_assignment.player_2_id 
+
+		# fail current players assignment
+		players_assignment.status = "failed"
+		players_assignment.save
+
+		# cancel killers assignment
+		player_killer_assignment.status = "canceled"
+		player_killer_assignment.save
+
+		# create new assignment
+		new_assignment = self.assignments.new
+		new_assignment.player_id = new_killer
+		new_assignment.player_2_id = new_target
+		new_assignment.time_started = Time.now
+		new_assignment.status = 'incomplete'
+		new_assignment.save
+
+		# kill this player by dummy killer
+		new_assignment = self.assignments.new
+		new_assignment.player_id = self.dummy_killer.id
+		new_assignment.player_2_id = player_id
+		new_assignment.time_started = Time.now
+		new_assignment.status = 'complete'
+		new_assignment.save
+	end
+
+
+	def dummy_killer
+		return self.players.where(name: "Chicken Katsu").first
+
+	end
 	def convert_reverse_kills
 		reverse_kill = self.assignments.where(status:"reverse")
 		reverse_kill.each do |rk|
